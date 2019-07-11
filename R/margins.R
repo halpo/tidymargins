@@ -25,20 +25,20 @@ function( FUN #< Function to compute one groups and margins.
         fixes <- select(.data, g) %>% purrr::imap(function(var, name){
             if (is.character(var)) all.name else
             if (is.factor(var)) {
-                old.levels <- levels(pull(.data, .))
+                old.levels <- levels(var)
                 assert_that(!(all.name %in% old.levels))
                 new.levels <- c(all.name, old.levels)
                 rlang::expr(
                     factor( all.name
                           , levels = !!new.levels
-                          , ordered = !!is.ordered(pull(.data, .))
+                          , ordered = !!is.ordered(var)
                           )
                 )
             } else list(all.name)
         })
         fix_present <- function(.){
             if (is.character(.)) . else
-            if (is.factor(.)) forcats::fct_relevel(forcats::fct_expand(!!., all.name)) else
+            if (is.factor(.)) forcats::fct_relevel(forcats::fct_expand(., all.name)) else
             as.list(.)
         }
         com <- Reduce(c,lapply(seq(0, length(g)), utils::combn, x=g, simplify=FALSE))
