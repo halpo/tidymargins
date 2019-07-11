@@ -1,0 +1,5 @@
+library(dplyr)
+x <- c( 'a', 'b', 'c')
+y <- c( 'd', 'e', 'f')
+data <- group_by(mutate(expand.grid( x = x, y = y, .rep = 1:10),  v = rnorm(90)), x, y)
+with_margins(summarise)(data, N=n(), sum=sum(v))

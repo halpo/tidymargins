@@ -1,0 +1,30 @@
+Package: tidymargins
+Type: Package
+Title: Tidy Marginal Functions
+Version: 0.1.0
+Authors@R: person("Andrew", "Redd", role = c("aut", "cre")
+                 , email = "Andrew.Redd@hsc.utah.edu"
+                 , comment = c(ORCID = "https://orcid.org/000-0002-6149-2438")
+                 )
+Maintainer: Andrew Redd <Andrew.Redd@hsc.utah.edu>
+Description: Provides the ability to easily perform functions over all 
+    margins of a grouped data frame.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Language: en-US
+Roxygen: list(markdown = TRUE)
+LazyData: true
+Imports:
+    assertthat,
+    dplyr, 
+    forcats,
+    magrittr,
+    pkgcond,
+    purrr,
+    rlang,
+    tidyr,
+    tidyselect,
+    utils
+Suggests:
+    testthat
+RoxygenNote: 6.1.1
