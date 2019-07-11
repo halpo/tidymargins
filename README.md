@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/halpo/tidymargins.svg?branch=master)](https://travis-ci.org/halpo/tidymargins)
 <!-- badges: end -->
 
 The goal of `tidymargins` is to provide the `with_margins()` adverb

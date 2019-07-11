@@ -1,0 +1,16 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+cache: packages
+
+r_packages:
+  - covr
+  - roxygen2
+  - testextra
+
+before_script:
+  - Rscript -e 'testextra::extract_tests()'
+  - Rscript -e 'roxygen2::roxygenise(".", "rd")'
+
+after_success:
+  - Rscript -e 'covr::codecov()'
