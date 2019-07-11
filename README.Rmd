@@ -1,0 +1,83 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+library(printr)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# tidymargins
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of `tidymargins` is to provide the `with_margins()` adverb 
+function, as well as the related `spread_each()` function.
+
+
+## Installation
+
+You can install the released version of tidymargins from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("tidymargins")
+```
+
+## Basic Usage
+
+`with_margins` is very simple to use.
+It is an adverb, i.e. it accepts and returns a function.
+The function, passed in, we'll call it `original`, should accept a 
+[table like](https://tibble.tidyverse.org/) 
+data object as it's first argument and return a similar object.
+The resulting function, we'll call it `modified`, will also 
+accept a data argument as it's first argument however that argument is expected to be a 
+[grouped data frame](https://dplyr.tidyverse.org/reference/group_by.html). 
+Other arguments to `modified` are passed along to the `original` function.
+When `modified` is called with a grouped data frame `original` is called for 
+every possible subset of grouping variables, including the full set 
+of all original grouping variables and the empty set implying no grouping,
+The results are bound together into a single data frame and returned.  
+The example below shows this as an example.
+
+```{r example}
+library(dplyr)
+library(tidymargins)
+data(mtcars)
+
+# our original function here is count
+modified <- with_margins(count)
+
+# modified is a function 
+class(modified)
+
+modified(group_by(mtcars, cyl, gear))
+```
+
+See that the output of modified is the counts grouped by; 
+both `cyl` and `gear`, by `cyl` alone, by `gear` alone, and a 
+grand total (no groups), all in a single data frame.  When a variable is 
+not used as a grouping variable it is replaced with the value `"(All)`", 
+indicating that all levels of that variable are included.  This label
+can be changes by specifying the `all.name` argument when calling 
+`with_margins`, shown in the next example.
+
+There is no need to store the intermediate function returned by 
+`with_margins`, but since the returned function may also accept other 
+arguments care should be taken to what is passing to which function.
+Care should also be taken with the pipe.
+
+```{r}
+mtcars %>% 
+    group_by(cyl, gear) %>% 
+    # <---------- with_margins ----------------><-- summarise --->
+    with_margins(summarise_if, all.name='Total')(is.numeric, mean)
+```
+
