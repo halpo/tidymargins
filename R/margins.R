@@ -21,63 +21,43 @@ function( FUN #< Function to compute one groups and margins.
         , all.name = "(All)"
         ){
     function(.data, ...){
-        fix_not_present <-
-            function(vars_not_present){
-                if (length(vars_not_present) == 0) return(rlang::exprs())
-                if (inherits(.data, 'tbl_lazy')) {
-                    vars_not_present %>%
-                        rlang::rep_along(all.name) %>%
-                        rlang::set_names(vars_not_present)
-                } else {
-                    vars_not_present %>%
-                        purrr::map(~
-                            if (is.factor(pull(.data, .))){
-                                old.levels <- levels(pull(.data, .))
-                                assert_that(!(all.name %in% old.levels))
-                                new.levels <- c(all.name, old.levels)
-                                rlang::expr(
-                                    factor( all.name
-                                          , levels = !!new.levels
-                                          , ordered = !!is.ordered(pull(.data, .))
-                                          )
-                                )
-                            } else
-                                all.name
-                        ) %>% rlang::set_names(vars_not_present)
-                }
-            }
-        fix_present <-
-            function(vars){
-                if (length(vars) == 0 ) return(rlang::exprs())
-                if (inherits(.data, 'tbl_lazy')) {
-                    rlang::exprs()
-                } else {
-                    vars %>% rlang::syms() %>% purrr::map(~rlang::expr(
-                        if (is.factor(!!.))
-                            forcats::fct_expand(!!., all.name) %>%
-                            forcats::fct_relevel(all.name)
-                        else
-                            !!.
-                    )) %>% rlang::set_names(vars)
-                }
-            }
         g   <- group_vars(.data)
+        fixes <- select(.data, g) %>% purrr::imap(function(var, name){
+            if (is.character(var)) all.name else
+            if (is.factor(var)) {
+                old.levels <- levels(pull(.data, .))
+                assert_that(!(all.name %in% old.levels))
+                new.levels <- c(all.name, old.levels)
+                rlang::expr(
+                    factor( all.name
+                          , levels = !!new.levels
+                          , ordered = !!is.ordered(pull(.data, .))
+                          )
+                )
+            } else list(all.name)
+        })
+        fix_present <- function(.){
+            if (is.character(.)) . else
+            if (is.factor(.)) forcats::fct_relevel(forcats::fct_expand(!!., all.name)) else
+            as.list(.)
+        }
         com <- Reduce(c,lapply(seq(0, length(g)), utils::combn, x=g, simplify=FALSE))
         com <- com[order(desc(sapply(com, length)))]
-        lapply(com, function(x, .data){
+        purrr::map_dfr(com, function(x, .data){
             vars_present  <- intersect(g,x)
             vars_not_present <- setdiff(g,x)
-            FUN(group_by(ungroup(.data), !!!rlang::syms(x), add=FALSE), ...) %T>%
+            .data %>% ungroup %>% select(-!!vars_not_present) %>%
+            group_by(!!!rlang::syms(x), add=FALSE) %>%
+            FUN(...) %T>%
                 { assert_that( !any(tbl_vars(.) %in% as.character(setdiff(g, x)))
                              , msg = "Unexpected grouping variable in output of" %<<%
                                       deparse(substitute(FUN))
                              )
                 } %>%
-            mutate(!!!fix_not_present(vars_not_present)) %>%
             ungroup() %>%
-            mutate(!!!fix_present(vars_present))
-        }, .data) %>%
-        purrr::reduce(dplyr::union_all)
+            mutate(!!!fixes[vars_not_present]) %>%
+            mutate_at(vars_present, fix_present)
+        }, .data)
     }
 }
 if(F){#@example
