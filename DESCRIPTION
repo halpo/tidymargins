@@ -26,6 +26,7 @@ Imports:
     tidyselect,
     utils
 Suggests:
+    covr,
     testthat
 RoxygenNote: 6.1.1
 URL: https://github.com/halpo/tidymargins

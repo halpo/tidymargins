@@ -7,6 +7,8 @@
 
 [![Travis build
 status](https://travis-ci.org/halpo/tidymargins.svg?branch=master)](https://travis-ci.org/halpo/tidymargins)
+[![Codecov test
+coverage](https://codecov.io/gh/halpo/tidymargins/branch/master/graph/badge.svg)](https://codecov.io/gh/halpo/tidymargins?branch=master)
 <!-- badges: end -->
 
 The goal of `tidymargins` is to provide the `with_margins()` adverb
