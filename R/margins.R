@@ -110,7 +110,6 @@ if(F){#@testing with_margins with factors
             mutate( v = rnorm(90)) %>%
             select(-.rep)
 
-
     ms <- with_margins(summarise)
     expect_is(ms, "function")
     val <- ms(group_by(data, x, y), N=n(), sum=sum(v))
@@ -127,4 +126,18 @@ if(F){#@testing with_margins with factors
                             ) %>% as_tibble
                 )
 }
+if(FALSE){#@testing with_margins for non-character/factor variables.
+    x <- c( 'a', 'b', 'c')
+    data <- expand.grid( x = x
+                       , y = 1:3
+                       , .rep = 1:10
+                       , stringsAsFactors = TRUE)
+    val <- with_margins(count)(group_by(data, x, y))
 
+    expect_is(val, 'tbl')
+    expect_is(pull(val, 'y'), 'list')
+    expect_equal(pull(val, 'y'), list(1,2,3,1,2,3,1,2,3
+                                     ,'(All)','(All)','(All)'
+                                     , 1,2,3,'(All)'))
+
+}
