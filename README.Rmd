@@ -17,8 +17,9 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/halpo/tidymargins.svg?branch=master)](https://travis-ci.org/halpo/tidymargins)
-[![Codecov test coverage](https://codecov.io/gh/halpo/tidymargins/branch/master/graph/badge.svg)](https://codecov.io/gh/halpo/tidymargins?branch=master)
+[![Test coverage](https://codecov.io/gh/halpo/tidymargins/branch/master/graph/badge.svg)](https://codecov.io/gh/halpo/tidymargins?branch=master)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![CRAN status](https://www.r-pkg.org/badges/version/tidymargins)](https://CRAN.R-project.org/package=tidymargins)
 <!-- badges: end -->
 
 The goal of `tidymargins` is to provide the `with_margins()` adverb 
@@ -61,7 +62,7 @@ modified <- with_margins(count)
 # modified is a function 
 class(modified)
 
-modified(group_by(mtcars, cyl, gear))
+modified(group_by(mtcars, Cylinders = cyl, Gears = gear))
 ```
 
 See that the output of modified is the counts grouped by; 
@@ -79,8 +80,18 @@ Care should also be taken with the pipe.
 
 ```{r}
 mtcars %>% 
+    select(cyl, gear, mpg, disp, hp, qsec) %>% 
     group_by(cyl, gear) %>% 
     # <---------- with_margins ----------------><-- summarise --->
-    with_margins(summarise_if, all.name='Total')(is.numeric, mean)
+    with_margins(summarise_if, all.name='Total')(is.numeric, mean) %>% 
+    # making pretty
+    rename( "Miles/(US) gallon" = "mpg"
+          , "Cylinders" = "cyl"
+          , "Displacement (cu.in.)" = "disp"
+          , "Gross horsepower" = "hp"
+          , "1/4 mile time" = "qsec"
+          , "Number of forward gears" = "gear"
+          )
+
 ```
 
