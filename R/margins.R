@@ -100,4 +100,31 @@ if(F){#@testing
                             , stringsAsFactors = FALSE) %>% as_tibble
                 )
 }
+if(F){#@testing with_margins with factors
+    x <- c( 'a', 'b', 'c')
+    y <- c( 'd', 'e', 'f')
+    data <- expand.grid( x = x
+                       , y = y
+                       , .rep = 1:10
+                       , stringsAsFactors = TRUE) %>%
+            mutate( v = rnorm(90)) %>%
+            select(-.rep)
+
+
+    ms <- with_margins(summarise)
+    expect_is(ms, "function")
+    val <- ms(group_by(data, x, y), N=n(), sum=sum(v))
+
+    expect_equal( val[1:3]
+                , data.frame( x = factor( c(rep(x, each =length(y)), x, rep("(All)", length(y)+1))
+                                        , levels = c(x, '(All)'))
+                            , y = factor( c(rep(y, length(x)), rep("(All)", length(x)), y, "(All)")
+                                        , levels = c(y, '(All)'))
+                            , N = c( rep(10L, length(x) * length(y))
+                                   , rep(30L, length(x) + length(y))
+                                   , 90L
+                                   )
+                            ) %>% as_tibble
+                )
+}
 
