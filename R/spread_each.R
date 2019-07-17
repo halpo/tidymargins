@@ -93,7 +93,7 @@ if(F){#@testing
                         , y = c( 'd', 'e', 'f')
                         , .rep = 1:10
                         ) %>%
-             mutate( v = rnorm(90)) %>%
+             mutate( v = rep(c(-1, 0, 1), length.out=90)) %>%
              select(-.rep)
     long <- data %>%
         group_by(x, y) %>%
@@ -110,6 +110,33 @@ if(F){#@testing
                                , paste0('N', '.', c( 'd', 'e', 'f'))
                                , paste0('sum', '.', c( 'd', 'e', 'f'))
                                ))
+}
+if(FALSE){#@testing spread_each(fill=...)
+    data <- expand.grid( x = c( 'a', 'b', 'c')
+                       , y = c( 'd', 'e', 'f')
+                       , .rep = 1:10
+                       ) %>%
+             mutate( v = rep(c(-1, 0, 1), length.out=90)) %>%
+             select(-.rep)
+    long <- data %>%
+        group_by(x, y) %>%
+        summarise(N=n(), sum=sum(v)) %>%
+        filter(!(x=='b' & y=='e'))
+
+    val <- spread_each(long, y, N, sum, fill=list(N='#N/A', sum='???'))
+    expect_is(val, 'tbl')
+    expect_equal( val[2,c('e.N', 'e.sum')]
+                , tibble(e.N = '#N/A', e.sum = '???')
+                )
+
+    expect_error(spread_each(long, y, N, sum, fill=list(N='#N/A')))
+    expect_error(spread_each(long, y, N, sum, fill=list('#N/A', '???', x='.')))
+
+    val2 <- spread_each(long, y, N, sum, fill=list(N='#N/A', '???'))
+    expect_is(val2, 'tbl')
+    expect_equal( val2[2,c('e.N', 'e.sum')]
+                , tibble(e.N = '#N/A', e.sum = '???')
+                )
 }
 
 
