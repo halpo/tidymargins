@@ -14,6 +14,14 @@ globalVariables('.')
 #' @param FUN the function to wrap.
 #' @param all.name the string to use to represent that a variable was marginalized over.
 #'
+#' @return Returns a function which alters the given `FUN` to be run for
+#' each possible subset of groupings and [row bind][dplyr::bind_rows]
+#' the results together.
+#'
+#' @seealso
+#' For understanding marginals:
+#' * [Marginal distributions](https://en.wikipedia.org/wiki/Marginal_distribution) on Wikipedia.
+#' * [Marginal frequency](https://stattrek.com/statistics/dictionary.aspx?definition=marginal_frequency) on statistics dictionary.
 #' @export
 #' @example inst/examples/ex-with_margins.R
 with_margins <-
