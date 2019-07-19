@@ -11,10 +11,10 @@
 #'                  `{key level}{sep}{value column name}`,
 #'                  otherwise the format is `{value column name}{sep}{key level}{sep}`
 #'
-#' @return A wide [tibble::tbl_df], with multiple value columns spread out.
+#' @return A wide [`tbl_df`][tibble::tbl_df], with multiple value columns spread out.
 #'
 #' @seealso
-#' * [Wide versus long data](https://en.wikipedia.org/wiki/Wide_and_narrow_data) (also known as narrow data) on wikipedia.
+#' * [Wide versus long data](https://en.wikipedia.org/wiki/Wide_and_narrow_data) (also known as narrow data) on Wikipedia.
 #' * [tidyr::spread()] for the single variable version.
 #' @export
 #' @example inst/examples/ex-spread_each.R
