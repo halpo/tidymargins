@@ -79,7 +79,8 @@
   <div class="contents col-md-9">
 <div id="tidymargins" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#tidymargins" class="anchor"></a>tidymargins</h1></div>
+<a href="#tidymargins" class="anchor"></a>tidymargins <img src="reference/figures/logo.png" align="right" width="120" alt="">
+</h1></div>
 <!-- badges: start -->
 
 <p>The goal of <code>tidymargins</code> is to provide the <code><a href="reference/with_margins.html">with_margins()</a></code> adverb function, as well as the related <code><a href="reference/spread_each.html">spread_each()</a></code> function.</p>
@@ -95,25 +96,17 @@
 <p><code>with_margins</code> is very simple to use. It is an adverb, i.e. it accepts and returns a function. The function, passed in, we’ll call it <code>original</code>, should accept a <a href="https://tibble.tidyverse.org/">table like</a> data object as it’s first argument and return a similar object. The resulting function, we’ll call it <code>modified</code>, will also accept a data argument as it’s first argument however that argument is expected to be a <a href="https://dplyr.tidyverse.org/reference/group_by.html">grouped data frame</a>. Other arguments to <code>modified</code> are passed along to the <code>original</code> function. When <code>modified</code> is called with a grouped data frame <code>original</code> is called for every possible subset of grouping variables, including the full set of all original grouping variables and the empty set implying no grouping, The results are bound together into a single data frame and returned.<br>
 The example below shows this as an example.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt;     filter, lag</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidymargins)</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(mtcars)</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co"># our original function here is count</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">modified &lt;-<span class="st"> </span><span class="kw"><a href="reference/with_margins.html">with_margins</a></span>(count)</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co"># modified is a function </span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(modified)</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt; [1] "function"</span></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="kw">modified</span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(mtcars, <span class="dt">Cylinders =</span> cyl, <span class="dt">Gears =</span> gear))</a></code></pre></div>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidymargins)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(mtcars)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co"># our original function here is count</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">modified &lt;-<span class="st"> </span><span class="kw"><a href="reference/with_margins.html">with_margins</a></span>(count)</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co"># modified is a function </span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(modified)</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt; [1] "function"</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="kw">modified</span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(mtcars, <span class="dt">Cylinders =</span> cyl, <span class="dt">Gears =</span> gear))</a></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Cylinders</th>
