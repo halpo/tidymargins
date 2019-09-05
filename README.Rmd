@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# tidymargins
+# tidymargins <img src="man/figures/logo.png" align="right" width="120" alt=""/>
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/halpo/tidymargins.svg?branch=master)](https://travis-ci.org/halpo/tidymargins)

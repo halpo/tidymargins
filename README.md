@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# tidymargins
+# tidymargins <img src="man/figures/logo.png" align="right" width="120" alt=""/>
 
 <!-- badges: start -->
 
@@ -47,14 +47,6 @@ The example below shows this as an example.
 
 ``` r
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 library(tidymargins)
 data(mtcars)
 
